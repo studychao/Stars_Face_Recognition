@@ -3,8 +3,7 @@ from app import db
 
 class History(db.Model):
     __tablename__ = 'history'
-    ID = db.Column(db.INTEGER, primary_key=True)
-    UID = db.Column(db.INTEGER)
-    MID = db.Column(db.INTEGER)
-    TimeStamp = db.Column(db.DateTime)
+    UID = db.Column(db.INTEGER, primary_key=True)
+    MID = db.Column(db.INTEGER, primary_key=True)
+    TimeStamp = db.Column(db.DateTime, primary_key=True)
     RecogPictureUrl = db.Column(db.CHAR(255))
