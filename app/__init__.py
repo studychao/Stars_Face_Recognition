@@ -10,7 +10,7 @@ def create_app(register_blueprint=True):
     db.init_app(app)
 
     if register_blueprint:
-        from .views import view
-        app.register_blueprint(view.mod_view)
+        from .views import musician
+        app.register_blueprint(musician.mod_view)
 
     return app
