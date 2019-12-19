@@ -12,5 +12,7 @@ def create_app(register_blueprint=True):
     if register_blueprint:
         from .views import musician
         app.register_blueprint(musician.mod_view)
+        from .views import user
+        app.register_blueprint(user.mod_view)
 
     return app
