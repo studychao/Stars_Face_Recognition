@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from .. import db
 from ..models.History import History
+import datetime
 
 mod_view = Blueprint('history', __name__)
 
@@ -41,3 +42,16 @@ def history_search():
             }
             history_dataset.append(data)
         return jsonify(history_dataset)
+
+
+# 6添加用户历史记录 input:用户ID,歌手ID,当前时间,已识别图片URL
+@mod_view.route('/history/add', methods=['POST'])
+def add_history():
+    req_data = request.get_json()
+    history = History(UID=req_data["UID"], MID=req_data["MID"], TimeStamp=datetime.datetime.now(), RecogPictureUrl=req_data["RecogPictureUrl"])
+    db.session.add(history)
+    db.session.commit()
+    data = {
+        "status": 1
+    }
+    return jsonify(data)

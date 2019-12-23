@@ -5,7 +5,7 @@ import datetime
 
 mod_view = Blueprint('user', __name__)
 
-
+# 添加用户 input:用户信息
 @mod_view.route('/user/add', methods=['POST'])
 def add_user():
     req_data = request.get_json()
@@ -27,11 +27,9 @@ def add_user():
 
 # 查询 input:微信名 output:用户ID
 @mod_view.route('/user', methods=['GET'])
-def get_musician():
+def get_user_id():
     wechatname = request.args.get('wechatname')
     user_info = db.session.query(User.UID).filter(User.WechatName == wechatname).first()
-    # musician_info = db.session.query(Musician.Name, Musician.Birthday, Musician.Height, Musician.MainAchievements,
-    #                                  Musician.RepresentativeWorks).filter(Musician.Name == name).first()
     if user_info is None:
         return None
     else:
@@ -39,3 +37,4 @@ def get_musician():
             "UID": user_info[0]
         }
         return jsonify(data)
+

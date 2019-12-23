@@ -5,7 +5,7 @@ from .. import db
 mod_view = Blueprint('musician', __name__)
 
 
-# 查询 input:歌手名 output:歌手信息
+# 2歌手详情 input:歌手名 output:歌手信息
 @mod_view.route('/musician', methods=['GET'])
 def get_musician():
     name = request.args.get('name')
@@ -24,7 +24,7 @@ def get_musician():
         return jsonify(data)
 
 
-# 查询 input:歌手名（模糊匹配） output:歌手列表
+# 1搜索歌手 input:歌手名（模糊匹配） output:歌手列表
 @mod_view.route('/musicians', methods=['GET'])
 def search_musicians():
     name = request.args.get('name')

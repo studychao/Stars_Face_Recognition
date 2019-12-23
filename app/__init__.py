@@ -14,9 +14,11 @@ def create_app(register_blueprint=True):
         from .views import history
         from .views import news
         from .views import user
+        from .views import collection
         app.register_blueprint(musician.mod_view)
         app.register_blueprint(history.mod_view)
         app.register_blueprint(news.mod_view)
         app.register_blueprint(user.mod_view)
+        app.register_blueprint(collection.mod_view)
 
     return app
