@@ -8,6 +8,10 @@ mod_view = Blueprint('history', __name__)
 
 @mod_view.route('/history/detail', methods=['GET'])
 def history_detail():
+    """
+    获取历史记录细节
+    :return: json 历史记录
+    """
     UID = request.args.get('UID')
     MID = request.args.get('MID')
     history_info = db.session.query(History.MID, History.UID, History.TimeStamp, History.RecogPictureUrl).filter(
@@ -26,6 +30,10 @@ def history_detail():
 
 @mod_view.route('/history/search', methods=['GET'])
 def history_search():
+    """
+    根据UID来搜索历史记录
+    :return: json 历史记录数据
+    """
     UID = request.args.get('UID')
     history_dataset = []
     history_info = db.session.query(History.MID, History.UID, History.TimeStamp, History.RecogPictureUrl).filter(

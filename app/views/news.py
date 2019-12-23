@@ -7,6 +7,10 @@ mod_view = Blueprint('news', __name__)
 
 @mod_view.route('/news/search', methods=['GET'])
 def get_news():
+    '''
+    根据NID获取新闻
+    :return: json news data
+    '''
     NID = request.args.get('NID')
     news_info = db.session.query(News.NID, News.Content, News.Title).filter(News.NID == NID).first()
     if news_info is None:
@@ -21,7 +25,12 @@ def get_news():
 
 
 @mod_view.route('/news', methods=['GET'])
+
 def get_news_all():
+    '''
+    获取所有新闻
+    :return: json news data
+    '''
     news_dataset = []
     news_info = db.session.query(News.NID, News.Content, News.Title)
     for news in news_info:

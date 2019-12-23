@@ -5,12 +5,14 @@ from ..models.Collection import Collection
 
 mod_view = Blueprint('collection', __name__)
 
+
 # 5查询用户收藏 input:用户id output:收藏列表
 @mod_view.route('/collections', methods=['GET'])
 def get_collections():
     uid = request.args.get('UID')
     collection_list = []
-    collections = db.session.query(Collection.UID, Collection.MID, Collection.TimeStamp).filter(Collection.UID == uid).all()
+    collections = db.session.query(Collection.UID, Collection.MID, Collection.TimeStamp).filter(
+        Collection.UID == uid).all()
     if collections is None:
         return None
     else:
@@ -44,7 +46,8 @@ def is_collection():
     uid = request.args.get('UID')
     mid = request.args.get('MID')
     print(uid, mid)
-    collection = db.session.query(Collection.UID, Collection.MID, Collection.TimeStamp).filter(Collection.UID == uid, Collection.MID == mid).first()
+    collection = db.session.query(Collection.UID, Collection.MID, Collection.TimeStamp).filter(Collection.UID == uid,
+                                                                                               Collection.MID == mid).first()
     # user_info = db.session.query(User.UID).filter(User.WechatName == wechatname).first()
     if collection is None:
         data = {
@@ -52,6 +55,32 @@ def is_collection():
         }
         return jsonify(data)
     else:
+        data = {
+            "status": 1
+        }
+        return jsonify(data)
+
+
+@mod_view.route('/delcollection', methods=['GET'])
+def del_collection():
+    """
+    删除收藏
+    :return: 状态1代表删除成功 状态2表示删除失败（collection信息不存在）
+    """
+    uid = request.args.get('UID')
+    mid = request.args.get('MID')
+    print(uid, mid)
+    collection = db.session.query(Collection.UID, Collection.MID, Collection.TimeStamp).filter(Collection.UID == uid,
+                                                                                               Collection.MID == mid).first()
+    if collection is None:
+        data = {
+            "status": 0
+        }
+        return jsonify(data)
+    else:
+        db.session.query(Collection.UID, Collection.MID, Collection.TimeStamp).filter(Collection.UID == uid,
+                                                                                      Collection.MID == mid).delete()
+        db.session.commit()
         data = {
             "status": 1
         }
