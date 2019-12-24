@@ -1,5 +1,7 @@
 from flask import Blueprint, request, jsonify
 from ..models.Musician import Musician
+from ..models.MusicianPicture import MusicianPicture
+from ..models.MusicianSong import MusicianSong
 from .. import db
 
 mod_view = Blueprint('musician', __name__)
@@ -10,16 +12,31 @@ mod_view = Blueprint('musician', __name__)
 def get_musician():
     name = request.args.get('name')
     musician_info = db.session.query(Musician.Name, Musician.Birthday, Musician.Height, Musician.MainAchievements,
-                                     Musician.RepresentativeWorks).filter(Musician.Name == name).first()
+                                     Musician.RepresentativeWorks, Musician.MID).filter(Musician.Name == name).first()
     if musician_info is None:
         return None
     else:
+        mid = musician_info[5]
+        song_list = []
+        pic_list = []
+        musician_song = db.session.query(MusicianSong.AlbumName, MusicianSong.AlbumPictureUrl, MusicianSong.SongName,
+                                         MusicianSong.SongUrl).filter(MusicianSong.MID == mid).all()
+        if musician_song:
+            for i in musician_song:
+                song_list.append(i)
+
+        musician_pic = db.session.query(MusicianPicture.PictureUrl).filter(MusicianPicture.MID == mid).all()
+        if musician_pic:
+            for j in musician_pic:
+                pic_list.append(j)
         data = {
             "Name": musician_info[0],
-            "Birthday": musician_info[1],
+            "Birthday": musician_info[1].strftime('%Y-%m-%d'),
             "Height": musician_info[2],
             "MainAchievements": musician_info[3],
-            "RepresentativeWorks": musician_info[4]
+            "RepresentativeWorks": musician_info[4],
+            "Songs": song_list,
+            "Pictures": pic_list
         }
         return jsonify(data)
 
@@ -39,4 +56,3 @@ def search_musicians():
             data_list.append(name)
 
         return jsonify(data_list)
-
